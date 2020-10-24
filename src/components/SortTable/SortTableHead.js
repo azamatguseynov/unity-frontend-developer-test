@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
@@ -6,23 +6,15 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 
 const useStyles = makeStyles({
-    table: {
-        minWidth: 650,
-    },
-    tableFooter: {
+    tableHeader: {
         padding: 20,
     },
 });
 
-export const SortTableHead = ({onSort, defaultOrderKey, defaultOrder = 'asc', headCells}) => {
-    const [order, setOrder] = useState(defaultOrder);
-    const [orderBy, setOrderBy] = useState(defaultOrderKey);
-
+export const SortTableHead = ({onSort, order, orderBy, headCells}) => {
     const handleSort = useCallback((property) => {
         const isAsc = orderBy === property && order === 'asc';
         const newOrder = isAsc ? 'desc' : 'asc';
-        setOrder(newOrder);
-        setOrderBy(property);
 
         if (onSort) {
             onSort(property, newOrder)
@@ -32,7 +24,7 @@ export const SortTableHead = ({onSort, defaultOrderKey, defaultOrder = 'asc', he
     return (
         <TableHead>
             <TableRow>
-                {headCells.map(({key, label, sortable}) => (
+                {headCells.map(({key, title, sortable}) => (
                     <TableCell key={key} sortDirection={orderBy === key ? order : false}>
                         {sortable
                             ? (
@@ -41,10 +33,10 @@ export const SortTableHead = ({onSort, defaultOrderKey, defaultOrder = 'asc', he
                                     direction={orderBy === key ? order : 'asc'}
                                     onClick={handleSort.bind(this, key)}
                                 >
-                                    {label}
+                                    {title}
                                 </TableSortLabel>
                             )
-                            : label
+                            : title
                         }
                     </TableCell>
                 ))}

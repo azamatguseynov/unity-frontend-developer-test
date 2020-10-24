@@ -5,6 +5,10 @@ import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
 import Paper from '@material-ui/core/Paper';
 import {SortTableHead} from "./SortTableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
+import get from 'lodash.get';
+import {useTableSort} from "./useTableSort";
 
 const useStyles = makeStyles({
     table: {
@@ -16,20 +20,38 @@ const useStyles = makeStyles({
 });
 
 export const SortTable = (props) => {
-    const {children, footer, headCells = [], onSort, defaultOrderKey, defaultOrder, ...tableProps} = props;
+    const {footer, columns = [], dataSource = [], defaultOrderKey, defaultOrder, ...tableProps} = props;
+    const {handleSort, sortedData, order, orderBy} = useTableSort(dataSource, defaultOrderKey, defaultOrder);
     const classes = useStyles();
 
     return (
         <TableContainer component={Paper}>
             <Table className={classes.table} {...tableProps}>
                 <SortTableHead
-                    headCells={headCells}
+                    headCells={columns}
+                    order={order}
+                    orderBy={orderBy}
                     defaultOrderKey={defaultOrderKey}
                     defaultOrder={defaultOrder}
-                    onSort={onSort}/>
+                    onSort={handleSort}/>
 
-                <TableBody>{children}</TableBody>
+                <TableBody>
+                    {sortedData.map((el, index) => {
+                        const columnCells = columns.map(({key, render}) => {
+                            const value = get(el, key, null);
+                            return render ? render(value) : value;
+                        });
+
+                        return (
+                            <TableRow key={index}>
+                                {columnCells.map((value, index) => <TableCell key={index}
+                                                                              align="left">{value}</TableCell>)}
+                            </TableRow>
+                        )
+                    })}
+                </TableBody>
             </Table>
+
             <div className={classes.tableFooter}>
                 {footer}
             </div>
