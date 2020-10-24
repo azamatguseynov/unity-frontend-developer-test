@@ -24,8 +24,21 @@ export const SortTable = (props) => {
     const {handleSort, sortedData, order, orderBy} = useTableSort(dataSource, defaultOrderKey, defaultOrder);
     const classes = useStyles();
 
+    const renderRow = (el, index) => {
+        const columnCells = columns.map(({key, render}) => {
+            const value = get(el, key, null);
+            return render ? render(value) : value;
+        });
+
+        return (
+            <TableRow data-testid="sort-table-row" key={index}>
+                {columnCells.map((value, index) => <TableCell key={index} align="left">{value}</TableCell>)}
+            </TableRow>
+        )
+    };
+
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} data-testid="sort-table">
             <Table className={classes.table} {...tableProps}>
                 <SortTableHead
                     headCells={columns}
@@ -36,19 +49,7 @@ export const SortTable = (props) => {
                     onSort={handleSort}/>
 
                 <TableBody>
-                    {sortedData.map((el, index) => {
-                        const columnCells = columns.map(({key, render}) => {
-                            const value = get(el, key, null);
-                            return render ? render(value) : value;
-                        });
-
-                        return (
-                            <TableRow key={index}>
-                                {columnCells.map((value, index) => <TableCell key={index}
-                                                                              align="left">{value}</TableCell>)}
-                            </TableRow>
-                        )
-                    })}
+                    {sortedData.map((el, index) => renderRow(el, index))}
                 </TableBody>
             </Table>
 
@@ -58,3 +59,4 @@ export const SortTable = (props) => {
         </TableContainer>
     );
 };
+

@@ -6,18 +6,16 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 
 const useStyles = makeStyles({
-    tableHeader: {
-        padding: 20,
-    },
+    tableHeader: {},
 });
 
 export const SortTableHead = ({onSort, order, orderBy, headCells}) => {
-    const handleSort = useCallback((property) => {
-        const isAsc = orderBy === property && order === 'asc';
+    const handleSort = useCallback((newOrderBy) => {
+        const isAsc = orderBy === newOrderBy && order === 'asc';
         const newOrder = isAsc ? 'desc' : 'asc';
 
         if (onSort) {
-            onSort(property, newOrder)
+            onSort(newOrderBy, newOrder)
         }
     }, [orderBy, order, onSort]);
 

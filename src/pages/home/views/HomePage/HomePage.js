@@ -4,6 +4,7 @@ import {HistoryTable} from "../../components/HistoryTable";
 import api from "../../../../lib/api";
 import Typography from "@material-ui/core/Typography";
 import {getDateFromTimestamp} from "../../helpers/getDateFromTimestamp";
+import {sortNumbers} from "../../helpers/sortNumbers";
 
 const useStyles = makeStyles({
     heading: {
@@ -12,14 +13,14 @@ const useStyles = makeStyles({
 });
 
 const USERS_COLUMNS = [
-    {key: 'timestamp', title: 'Date', sortable: true, render: getDateFromTimestamp},
+    {key: 'timestamp', title: 'Date', sortable: true, render: getDateFromTimestamp, sorter: sortNumbers},
     {key: 'id', title: 'User ID'},
     {key: 'diff[0].oldValue', title: 'Old Value'},
     {key: 'diff[0].newValue', title: 'New Value'}
 ];
 
 const PROJECTS_COLUMNS = [
-    {key: 'timestamp', title: 'Date', sortable: true, render: getDateFromTimestamp},
+    {key: 'timestamp', title: 'Date', sortable: true, render: getDateFromTimestamp, sorter: sortNumbers},
     {key: 'id', title: 'Project ID'},
     {key: 'diff[0].oldValue', title: 'Old Value'},
     {key: 'diff[0].newValue', title: 'New Value'}

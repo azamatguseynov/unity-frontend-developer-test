@@ -21,16 +21,20 @@ export const HistoryTableFooter = ({hasError, isLoading, loadMore}) => {
     const buttonText = hasError ? 'Retry' : 'Load more';
 
     return (
-        <div className={classes.tableFooter}>
+        <div className={classes.tableFooter} data-testid="history-table-footer">
             {hasError && (
-                <Typography className={classes.tableFooterError} color='error'>
+                <Typography data-testid="error-message" className={classes.tableFooterError} color='error'>
                     We had problem fetching your data. Please try again.
                 </Typography>
             )}
 
             {isLoading
-                ? <CircularProgress/>
-                : <Button variant="contained" color="primary" onClick={loadMore}>{buttonText}</Button>
+                ? <CircularProgress data-testid="load-more-spinner"/>
+                : (
+                    <Button data-testid="load-more-button" variant="contained" color="primary" onClick={loadMore}>
+                        {buttonText}
+                    </Button>
+                )
             }
         </div>
     );
